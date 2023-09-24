@@ -1,0 +1,161 @@
+1)show dbs
+2)use database_name
+3)db.s1.insertOne()	#s1-->table/collection name!
+4)db.s1.insertMAny()		
+5)db.s1.find(query,projection)   
+	#query--> what you want to find... and projection to not print anything u want..
+ 	#db.s1.find({Age:19},{id:0 or false}) 
+6)db.s1.findOne({Age:19},{_id:0})  	
+	# gives the first result it gets.
+7)limit()
+	#db.s1.find({Age:19},{id:0}).limit(2) 
+8)skip()
+	#db.s1.find({Age:19},{id:0}).skip(1)
+	##db.s1.find({Age:19},{id:0}).limit(1).skip(1)
+9)Update()
+	♦updateOne(filter,document,options)
+	#db.s1.updateOne({Name:"Kushal"},{$set:{Name:"Milan"}}) #updates only one value
+	#db.s1.updateMany({Name:"Kushal"},{$set:{Name:"Milan"}}) #updates all kushal to milan..
+	#db.s1.updateOne({Name:"Kushal",Age:19},{$set:{Name:"Milan",Age:19}}) #updates only one value
+	#db.s1.updateMany({Name:"Kushal",Age:19},{$set:{Name:"Milan",Age:19}}) #updates all kushal to milan..
+10)for insert
+	#in update in $set give new column name
+	#here the asked record (here kushal) should be there compulsory	
+11)upsert
+	#here if not found the required record then it will create new.
+	#updateOne({Name:"Darsh"},{$set:{Age:20,Surname:"Patel"}},{upsert:true})
+12)delete
+	#db.s1.deleteOne({Name:'Darsh'})
+	#db.s1.deleteMany({Name:'Darsh'})
+	#db.s1.deleteMany({}) #will delete all...
+------------------------------------------------------------------------------------------------------------------------------------------
+LOGICAL OPERATORS
+------------------
+1)"and"
+	 db.s1.find({$and:[{Name:"Milan"},{Age:19}]})
+2)"or"
+	 db.s1.find({$or:[{Name:"Milan"},{Age:20}]})
+.
+.
+.
+------------------------------------------------------------------------------------------------------------------------------------------
+
+1)$inc 
+	{$inc:{<field1>:<amount1>,...}})
+	db.s1.updateMany({},{$inc:{Age:10}})
+	db.s1.updateOne({},{$inc:{Age:50}})
+	db.s1.updateOne({},{$inc:{Age:-15}}) #decrement
+2)$mul
+	{$mul:{<field1>:<amount1>,...}})
+	db.s1.updateMany({},{$mul:{Age:0.5}})
+------------------------------------------------------------------------------------------------------------------------------------------
+COMPARISION OPERATORS
+---------------------
+1)$eq
+	db.s1.find({Age:{$eq:20}})
+2)$gt
+	db.s1.find({Age:{$gt:30}})
+3)$lt
+	db.s1.find({Age:{$lt:30}})
+4)$gte
+	db.s1.find({Age:{$gte:50}})
+5)$lte
+	db.s1.find({Age:{$lte:50}})
+6)$in
+	db.s1.find({Age:{$in:[64,29,23,43,56]}})
+7)$ne
+	db.s1.find({Age:{$ne:20}})
+8)$nin
+	db.s1.find({Age:{$nin:[64,29,23,43,56]}})
+eg. -->db.s1.find({$and:[{Age:{$gte:20}},{Age:{$lte:50}}]})
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Q. Update only one document with branch cse and age 21 .. where age is =5
+-->db.s1.updateOne({Age:32},{$set:{Branch:"CSE",Age:21}})
+
+Q. To display all documents with age=25. 
+-->db.s1.find({Age:25},{_id:0})
+
+Q. To display all documents other than age 25.
+-->db.s1.find({Age:{$ne:21}},{_id:0})
+
+Q. To display all any of the values in an array of age.
+-->db.s1.find({Age:{$in:[29,30,50,40,60,20]}}) 
+-->for not in array--> db.s1.find({Age:{$nin:[29,30,50,40,60,20]}})
+
+Q. To display docuument having age not lt 30
+-->db.s1.find({Age:{$not:{$lt:30}}})
+
+Q. nor
+-->db.s1.find({$nor:[{Name:"Kushal"},]})
+-------------------------------------------------------------------------------
+♠$unset
+db.s1.updateOne({Age:{$eq:21}},{$unset:{Branch:"CSE",Age:21}})
+
+♠$rename
+db.s1.updateOne({},{$rename:{Name:'FirstName'}})
+
+♠count()
+db.s1.find({Age:30}).count()
+
+♠drop
+db.s1.drop()
+
+♠Sort
+db.s1.find().sort({Age:-1})  #1 for ascending order and -1 for descending order
+db.s1.find().sort({Name:1})
+-----------------------------------------------------------------------------------------------
+Q. Create a collection named student having fields name age standard and percentage. Insert 5-10 records in this table.
+   1>Find names of all the students having age>5.
+   2>Update the standard for all the students by 1.
+   3>Arrange all the records in descending order of age.
+   4>Show the name of the student who is the oldest among all records.
+   5>Delete the record of a student if standard is 12.
+Ans.
+   db.student.insertMany([{Name:"Milan",Age:16,Standard:10,Percentage:90},{Name:"Kushal",Age:13,Standard:7,Percentage:89},{Name:"Meet",Age:13,Standard:7,Percentage:70},{Name:"Akshay",Age:12,Standard:6,Percentage:95},{Name:"Darsh",Age:12,Standard:10,Percentage:75},{Name:"Vraj",Age:14,Standard:8,Percentage:65},{Name:"Henit",Age:8,Standard:2,Percentage:60},{Name:"Ved",Age:9,Standard:3,Percentage:100},{Name:"Krunal",Age:15,Standard:9,Percentage:85},{Name:"Aagam",Age:10,Standard:4,Percentage:80}])
+
+1> db.student.find({Age:{$gt:5}})
+2> db.student.updateMany({},{$inc:{Standard:1}})
+3> db.s1.find().sort({Age:-1})  
+4> db.student.find({},{Age:0,_id:0,Standard:0,Percentage:0}).sort({Age:-1}).limit(1)
+5> db.student.deleteMany({Standard:{$gte:12}})
+------------------------------------------------------------------------------------------------------------------
+Q. Create a collection as 
+	{"_id":ObjectId(""),
+	 "name":"Milan",
+	 "age":"25",
+	 "position":"Developer",
+	 "salary":"60,000",
+	 "department":"Engineering"}
+-->db.company.insertMany([{"name":"Milan","age":"25","position":"Developer","salary":"90,000","department":"Engineering"},{"name":"Kushal","age":"26","position":"CEO","salary":"100000","department":"Engineering"},{"name":"Krunal","age":"28","position":"Developer","salary":"70,000","department":"Diploma"},{"name":"Meet","age":"27","position":"Salesman","salary":"50,000","department":"Marketing"},{"name":"Akshay","age":"24","position":"Manager","salary":"95,000","department":"Management"},{"name":"Henit","age":"25","position":"Salesman","salary":"50,000","department":"Marketing"}])
+
+1>Find all the documents by position developer.
+-->db.company.find({position:"Developer"})
+2> 25<age<40
+-->db.company.find({$and:[{"age":{$gt:"25"}},{"age":{$lt:"40"}}]})
+3>Retrieve the employeee having highest salary
+-->db.company.find({},{_id:0}).sort({"salary":-1}).limit(1)
+4>salary gt 50000
+-->db.company.find({"salary":{$gt:50000}})
+5>employee names and position excluding field _id.
+-->db.company.find({},{name:1,position:1,_id:0})
+6>count the number of employees who are not on leave assuming status field.
+-->db.company.find({status:"active"}).count()
+7>retrieve employees who are either developers or testers and are under 40 years.
+-->db.company.find({$and:[{$or:[{position:"Developer"},{position:"tester"}]},{age:{$lt:40}}]})
+8>Increase the salary of a employee named Kushal by 10%
+-->db.company.updateOne({Name:"Kushal"},{$mul:{salary:1.1}})
+--------------------------------------------------------------------------------------------------------------------------------
+regex
+-------
+db.student.find({name:{$regex:/shah/}})
+$regex:/shah/i
+$regex:/^shah/i
+$regex:/shah$/i
+$regex:/[0-9]$/
+$regex:/^[0-9]/
+$regex:/^[0-9]+$/
+$regex:/^[A-Za-z]{3,10}$/
+
+
+

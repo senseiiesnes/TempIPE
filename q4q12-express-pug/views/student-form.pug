@@ -1,0 +1,31 @@
+html
+  head
+    title Student Form
+  body
+    h1 Student Form
+    form(action="/data" method="post")
+      label(for="rollNo") Roll No:
+      input(type="number" name="rollNo" required)
+      br
+      label(for="name") Name:
+      input(type="text" name="name" required)
+      br
+      label(for="division") Division:
+      input(type="text" name="division" required)
+      br
+      label(for="email") Email:
+      input(type="email" name="email" required)
+      br
+      label(for="subject") Subject:   
+      label FSD-2
+        input(type="radio" name="subject" value="FSD-2") 
+      label COA
+        input(type="radio" name="subject" value="COA") 
+      label PYTHON-2
+        input(type="radio" name="subject" value="PYTHON-2")
+      label DM
+        input(type="radio" name="subject" value="DM")
+      label TOC
+        input(type="radio" name="subject" value="TOC")
+      br
+      button(type="submit") Submit
