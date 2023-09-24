@@ -1,0 +1,47 @@
+To create a replica set and perform these actions, you typically work with MongoDB. Below are step-bystep instructions on how to achieve your goal:
+1. **Set Up Replica Set**:
+ First, make sure you have MongoDB installed and running.
+ Start three separate MongoDB instances on ports 27017, 27018, and 27019, each in its own terminal
+window.
+ ```bash
+ Mongod –port 27017 –replSet rs1
+ Mongod –port 27018 –replSet rs1
+ Mongod –port 27019 –replSet rs1
+ ```
+2. **Initialize Replica Set**:
+ Connect to the primary instance (port 27017) and initialize the replica set:
+ ```bash
+ Mongo –port 27017
+➢ Rs.initiate()
+ ```
+ Then, add the other two instances to the replica set:
+ ```bash
+ > rs.add(“localhost:27018”)
+ > rs.add(“localhost:27019”)
+ ```
+3. **Create a Collection and Insert Documents**:
+ On the primary port (27017), create a database (e.g., “mydb”) and a collection (e.g., “student”). Insert
+some sample documents into the “student” collection:
+ ```bash
+ > use mydb
+ > db.createCollection(“student”)
+ > db.student.insertMany([
+ { name: “Alice”, age: 18, date: new Date() },
+ { name: “Bob”, age: 20, date: new Date() },
+ { name: “Charlie”, age: 15, date: new Date() },
+ { name: “David”, age: 25, date: new Date() }
+ ])
+ ```
+4. **Read Documents on Replica Port**:
+ Connect to one of the secondary instances (port 27018 or 27019) to read documents with age greater
+than 15:
+ ```bash
+ Mongo –port 27018
+ > rs.slaveOk() // Allow reading from secondary
+ > use mydb
+ > db.student.find({ age: { $gt: 15 } })
+ ```
+This setup replicates data from the primary (port 27017) to the secondary (port 27018 or 27019) in the
+“rs1” replica set. You can read documents on the secondary with the `rs.slaveOk()` command. Make sure
+to adjust the port numbers and database/collection names to match your specific configuration if
+necessary.
